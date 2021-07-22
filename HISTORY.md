@@ -2,7 +2,7 @@
 
 ## 1.0.10 / 2021-07-22
 
-- Standardize code style rules
+- Standardized code style rules
 
 ## 1.0.9 / 2021-07-09
 
