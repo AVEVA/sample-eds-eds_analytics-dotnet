@@ -1,5 +1,9 @@
 # Version History
 
+## 1.0.10 / 2021-07-22
+
+- Standardized code style rules
+
 ## 1.0.9 / 2021-07-09
 
 - Clean up gitignore
