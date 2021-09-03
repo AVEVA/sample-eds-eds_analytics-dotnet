@@ -1,5 +1,9 @@
 # Version History
 
+## 1.0.11 / 2021-09-03
+
+- Updated dependencies
+
 ## 1.0.10 / 2021-07-22
 
 - Standardized code style rules
