@@ -35,7 +35,7 @@ jobs:
   - job: Tests
     pool:
       name: OpsGuild-Staging1
-      demands: Agent.Name -equals OpsGuild-Staging1
+      demands: Agent.Name -equals IACA4336910
     steps:
       - task: DotNetCoreCLI@2
         displayName: 'Run tests'
