@@ -2,7 +2,7 @@
 
 **Version:** 1.0.13
 
-[![Build Status](https://dev.azure.com/osieng/engineering/_apis/build/status/product-readiness/Edge/osisoft.sample-eds-eds_analytics-dotnet?repoName=osisoft%2Fsample-eds-eds_analytics-dotnet&branchName=main)](https://dev.azure.com/osieng/engineering/_build/latest?definitionId=2642&repoName=osisoft%2Fsample-eds-eds_analytics-dotnet&branchName=main)
+[![Build Status](https://dev.azure.com/osieng/engineering/_apis/build/status/product-readiness/Edge/aveva.sample-eds-eds_analytics-dotnet?branchName=main)](https://dev.azure.com/osieng/engineering/_build/latest?definitionId=2642&branchName=main)
 
 This sample demonstrates how to build an application that can run analytics against streams in Edge Data Store and write results back to Edge Data Store.
 
