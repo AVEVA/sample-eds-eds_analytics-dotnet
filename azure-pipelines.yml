@@ -34,7 +34,7 @@ variables:
 jobs:
   - job: Tests
     pool:
-      name: 00-OSIManaged-Containers
+      name: 00-NSZManaged-Build
       demands: Agent.Name -equals IACA4336910
     steps:
       - task: DotNetCoreCLI@2
