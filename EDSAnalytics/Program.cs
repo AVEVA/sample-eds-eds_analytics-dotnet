@@ -278,7 +278,7 @@ namespace EDSAnalytics
             var destination = new MemoryStream();
             using (var decompressor = (Stream)new GZipStream(response, CompressionMode.Decompress, true))
             {
-                decompressor.CopyToAsync(destination).Wait();
+                await decompressor.CopyToAsync(destination).ConfigureAwait(false);
             }
 
             destination.Seek(0, SeekOrigin.Begin);
