@@ -34,8 +34,8 @@ variables:
 jobs:
   - job: Tests
     pool:
-      name: OpsGuild-Staging1
-      demands: Agent.Name -equals IACA4336910
+      name: 00-OSIManaged-Containers
+      demands: Agent.SKU2 -equals VSBuildTools.v16.11.7plussAndEDS
     steps:
       - task: DotNetCoreCLI@2
         displayName: 'Run tests'
