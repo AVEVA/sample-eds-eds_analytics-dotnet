@@ -1,6 +1,6 @@
 # EDS Analytics Sample and Test
 
-**Version:** 1.0.14
+**Version:** 1.0.15
 
 [![Build Status](https://dev.azure.com/osieng/engineering/_apis/build/status/product-readiness/Edge/aveva.sample-eds-eds_analytics-dotnet?branchName=main)](https://dev.azure.com/osieng/engineering/_build/latest?definitionId=2642&branchName=main)
 
