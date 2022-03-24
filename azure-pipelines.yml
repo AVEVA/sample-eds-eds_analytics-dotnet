@@ -39,6 +39,7 @@ jobs:
   - job: Tests
     pool:
       name: 00-OSIManaged-Build
+      demands: SKU -equals VSEnterprise
     steps:
       - task: DotNetCoreCLI@2
         displayName: 'Run tests'
