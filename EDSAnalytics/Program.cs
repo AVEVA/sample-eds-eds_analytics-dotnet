@@ -12,8 +12,8 @@ namespace EDSAnalytics
 {
     public static class Program
     {
-        private static readonly HttpClient _httpClient = new HttpClient();
-        private static readonly HttpClient _httpClientGzip = new HttpClient();
+        private static readonly HttpClient _httpClient = new ();
+        private static readonly HttpClient _httpClientGzip = new ();
 
         private static int _port;
         private static string _tenantId;
@@ -40,23 +40,23 @@ namespace EDSAnalytics
                 // ====================== Data Filtering portion ======================
                 Console.WriteLine();
                 Console.WriteLine("================= Data Filtering =================");
-                
+
                 // Step 1 - Create SineWave type
-                var sineWaveProperties = new List<SdsTypeProperty>
-                    {
+                List<SdsTypeProperty> sineWaveProperties = new ()
+                {
                         CreateSdsTypePropertyOfTypeDateTime(nameof(SineData.Timestamp), true),
                         CreateSdsTypePropertyOfTypeDouble(nameof(SineData.Value), false),
-                    };
+                };
 
-                var sineWaveType = await AsyncCreateTypeAsync(Constants.SineWaveStream, Constants.SineWaveStream, sineWaveProperties).ConfigureAwait(false);
+                SdsType sineWaveType = await AsyncCreateTypeAsync(Constants.SineWaveStream, Constants.SineWaveStream, sineWaveProperties).ConfigureAwait(false);
 
                 // Step 2 - Create SineWave stream        
-                var sineWaveStream = await AsyncCreateStreamAsync(sineWaveType, Constants.SineWaveStream, Constants.SineWaveStream).ConfigureAwait(false);
+                SdsStream sineWaveStream = await AsyncCreateStreamAsync(sineWaveType, Constants.SineWaveStream, Constants.SineWaveStream).ConfigureAwait(false);
 
                 // Step 3 - Create a list of events of SineData objects. The value property of the SineData object is intitialized to a value between -1.0 and 1.0
                 Console.WriteLine("Initializing SineData Events");
-                var waveList = new List<SineData>();
-                var firstTimestamp = DateTime.UtcNow;
+                List<SineData> waveList = new ();
+                DateTime firstTimestamp = DateTime.UtcNow;
                 
                 // numberOfEvents must be an integer > 1
                 int numberOfEvents = 100;
@@ -71,13 +71,13 @@ namespace EDSAnalytics
                 await AsyncWriteDataToStreamAsync(waveList, sineWaveStream).ConfigureAwait(false);
 
                 // Step 4 - Ingress the sine wave data from the SineWave stream
-                var returnData = await AsyncQuerySineDataAsync(sineWaveStream, waveList[0].Timestamp, numberOfEvents).ConfigureAwait(false);
+                List<SineData> returnData = await AsyncQuerySineDataAsync(sineWaveStream, waveList[0].Timestamp, numberOfEvents).ConfigureAwait(false);
 
                 // Step 5 - Create FilteredSineWaveStream
-                var filteredSineWaveStream = await AsyncCreateStreamAsync(sineWaveType, Constants.FilteredSineWaveStream, Constants.FilteredSineWaveStream).ConfigureAwait(false);
+                SdsStream filteredSineWaveStream = await AsyncCreateStreamAsync(sineWaveType, Constants.FilteredSineWaveStream, Constants.FilteredSineWaveStream).ConfigureAwait(false);
 
                 // Step 6 - Populate FilteredSineWaveStream with filtered data
-                var filteredWave = new List<SineData>();
+                List<SineData> filteredWave = new ();
                 int numberOfValidValues = 0;
                 Console.WriteLine("Filtering Data");
                 for (int i = 0; i < numberOfEvents; i++)
@@ -98,31 +98,31 @@ namespace EDSAnalytics
                 Console.WriteLine("================ Data Aggregation ================");
 
                 // Step 7 - Create aggregatedDataType type   
-                var aggregatedData = new List<SdsTypeProperty>
-                    {
+                List<SdsTypeProperty> aggregatedData = new ()
+                {
                         CreateSdsTypePropertyOfTypeDateTime(Constants.AggregatedDataTimestampProperty, true),
                         CreateSdsTypePropertyOfTypeDouble(Constants.AggregatedDataMeanProperty, false),
                         CreateSdsTypePropertyOfTypeDouble(Constants.AggregatedDataMinimumProperty, false),
                         CreateSdsTypePropertyOfTypeDouble(Constants.AggregatedDataMaximumProperty, false),
                         CreateSdsTypePropertyOfTypeDouble(Constants.AggregatedDataRangeProperty, false),
-                    };
+                };
 
-                var aggregatedDataType = await AsyncCreateTypeAsync(Constants.AggregatedDataStream, Constants.AggregatedDataStream, aggregatedData).ConfigureAwait(false);
+                SdsType aggregatedDataType = await AsyncCreateTypeAsync(Constants.AggregatedDataStream, Constants.AggregatedDataStream, aggregatedData).ConfigureAwait(false);
 
                 // Step 8 - Create CalculatedAggregatedData stream
-                var calculatedAggregatedDataStream = await AsyncCreateStreamAsync(aggregatedDataType, 
+                SdsStream calculatedAggregatedDataStream = await AsyncCreateStreamAsync(aggregatedDataType, 
                     Constants.CalculatedAggregatedDataStream, Constants.CalculatedAggregatedDataStream).ConfigureAwait(false);
 
                 // Step 9 - Calculate mean, min, max, and range using c# libraries and send to the CalculatedAggregatedData Stream
                 Console.WriteLine("Calculating mean, min, max, and range");
-                var sineDataValues = new List<double>();
+                List<double> sineDataValues = new ();
                 for (int i = 0; i < numberOfEvents; i++)
                 {
                     sineDataValues.Add(returnData[i].Value);
                     numberOfValidValues++;
                 }
 
-                var calculatedData = new AggregateData
+                AggregateData calculatedData = new ()
                 {
                     Timestamp = firstTimestamp,
                     Mean = returnData.Average(rd => rd.Value),
@@ -138,12 +138,12 @@ namespace EDSAnalytics
                 await AsyncWriteDataToStreamAsync(calculatedData, calculatedAggregatedDataStream).ConfigureAwait(false);
 
                 // Step 10 - Create EdsApiAggregatedData stream
-                var edsApiAggregatedDataStream = await AsyncCreateStreamAsync(aggregatedDataType, 
+                SdsStream edsApiAggregatedDataStream = await AsyncCreateStreamAsync(aggregatedDataType, 
                     Constants.EdsApiAggregatedDataStream, Constants.EdsApiAggregatedDataStream).ConfigureAwait(false);
 
                 // Step 11 - Use EDS’s standard data aggregate API calls to ingress aggregated data calculated by EDS and send to EdsApiAggregatedData stream
-                var summaryData = await AsyncQuerySummaryDataAsync(sineWaveStream, calculatedData.Timestamp, firstTimestamp.AddSeconds(numberOfEvents)).ConfigureAwait(false);
-                var edsApi = new AggregateData
+                string summaryData = await AsyncQuerySummaryDataAsync(sineWaveStream, calculatedData.Timestamp, firstTimestamp.AddSeconds(numberOfEvents)).ConfigureAwait(false);
+                AggregateData edsApi = new ()
                 {
                     Timestamp = firstTimestamp,
                     Mean = GetValue(summaryData, Constants.AggregatedDataMeanProperty),
@@ -192,8 +192,8 @@ namespace EDSAnalytics
         {
             Console.WriteLine("Deleting " + stream.Id + " Stream");
 
-            var requestUri = new Uri($"http://localhost:{_port}/api/v1/Tenants/{_tenantId}/Namespaces/{_namespaceId}/Streams/{stream.Id}");
-            var responseDeleteStream = await _httpClient.DeleteAsync(requestUri).ConfigureAwait(false);
+            Uri requestUri = new ($"http://localhost:{_port}/api/v1/Tenants/{_tenantId}/Namespaces/{_namespaceId}/Streams/{stream.Id}");
+            HttpResponseMessage responseDeleteStream = await _httpClient.DeleteAsync(requestUri).ConfigureAwait(false);
             CheckIfResponseWasSuccessful(responseDeleteStream);
         }
 
@@ -201,14 +201,14 @@ namespace EDSAnalytics
         {
             Console.WriteLine("Deleting " + type.Id + " Type");
 
-            var requestUri = new Uri($"http://localhost:{_port}/api/v1/Tenants/{_tenantId}/Namespaces/{_namespaceId}/Types/{type.Id}");
-            var responseDeleteType = await _httpClient.DeleteAsync(requestUri).ConfigureAwait(false);
+            Uri requestUri = new ($"http://localhost:{_port}/api/v1/Tenants/{_tenantId}/Namespaces/{_namespaceId}/Types/{type.Id}");
+            HttpResponseMessage responseDeleteType = await _httpClient.DeleteAsync(requestUri).ConfigureAwait(false);
             CheckIfResponseWasSuccessful(responseDeleteType);
         }
 
         private static async Task<SdsStream> AsyncCreateStreamAsync(SdsType type, string id, string name)
         {
-            var stream = new SdsStream
+            SdsStream stream = new ()
             {
                 TypeId = type.Id,
                 Id = id,
@@ -217,10 +217,10 @@ namespace EDSAnalytics
 
             Console.WriteLine("Creating " + stream.Id + " Stream");
             
-            using (var stringStream = new StringContent(JsonSerializer.Serialize(stream)))
+            using (StringContent stringStream = new (JsonSerializer.Serialize(stream)))
             {
-                var requestUri = new Uri($"http://localhost:{_port}/api/v1/Tenants/{_tenantId}/Namespaces/{_namespaceId}/Streams/{stream.Id}");
-                var responseCreateStream = await _httpClient.PostAsync(requestUri, stringStream).ConfigureAwait(false);
+                Uri requestUri = new ($"http://localhost:{_port}/api/v1/Tenants/{_tenantId}/Namespaces/{_namespaceId}/Streams/{stream.Id}");
+                HttpResponseMessage responseCreateStream = await _httpClient.PostAsync(requestUri, stringStream).ConfigureAwait(false);
 
                 CheckIfResponseWasSuccessful(responseCreateStream);
             }
@@ -230,14 +230,14 @@ namespace EDSAnalytics
 
         private static async Task<SdsType> AsyncCreateTypeAsync(string id, string name, List<SdsTypeProperty> properties)
         {
-            var type = new SdsType(id, name, 1, properties);
+            SdsType type = new (id, name, 1, properties);
 
             Console.WriteLine("Creating " + type.Id + " Type");
             
-            using (var stringType = new StringContent(JsonSerializer.Serialize(type)))
+            using (StringContent stringType = new (JsonSerializer.Serialize(type)))
             {
-                var requestUri = new Uri($"http://localhost:{_port}/api/v1/Tenants/{_tenantId}/Namespaces/{_namespaceId}/Types/{type.Id}");
-                var responseType = await _httpClient.PostAsync(requestUri, stringType).ConfigureAwait(false);
+                Uri requestUri = new ($"http://localhost:{_port}/api/v1/Tenants/{_tenantId}/Namespaces/{_namespaceId}/Types/{type.Id}");
+                HttpResponseMessage responseType = await _httpClient.PostAsync(requestUri, stringType).ConfigureAwait(false);
 
                 CheckIfResponseWasSuccessful(responseType);
             }
@@ -249,12 +249,12 @@ namespace EDSAnalytics
         {
             Console.WriteLine("Ingressing data from " + stream.Id + " stream");
 
-            var requestUri = new Uri($"http://localhost:{_port}/api/v1/Tenants/{_tenantId}/Namespaces/{_namespaceId}/Streams/" +
+            Uri requestUri = new ($"http://localhost:{_port}/api/v1/Tenants/{_tenantId}/Namespaces/{_namespaceId}/Streams/" +
                 $"{stream.Id}/Data?startIndex={timestamp:o}&count={numberOfEvents}");
-            using var responseIngress = await _httpClientGzip.GetAsync(requestUri).ConfigureAwait(false);
+            using HttpResponseMessage responseIngress = await _httpClientGzip.GetAsync(requestUri).ConfigureAwait(false);
             CheckIfResponseWasSuccessful(responseIngress);
-            var ms = await AsyncDecompressGzipAsync(responseIngress).ConfigureAwait(false);
-            using var sr = new StreamReader(ms);
+            MemoryStream ms = await AsyncDecompressGzipAsync(responseIngress).ConfigureAwait(false);
+            using StreamReader sr = new (ms);
             return await JsonSerializer.DeserializeAsync<List<SineData>>(ms).ConfigureAwait(false);
         }
 
@@ -262,21 +262,21 @@ namespace EDSAnalytics
         {
             Console.WriteLine("Ingressing Data from " + stream.Id + " Stream Summary");
 
-            var requestUri = new Uri($"http://localhost:{_port}/api/v1/Tenants/{_tenantId}/Namespaces/{_namespaceId}/Streams/" +
+            Uri requestUri = new ($"http://localhost:{_port}/api/v1/Tenants/{_tenantId}/Namespaces/{_namespaceId}/Streams/" +
                 $"{stream.Id}/Data/Summaries?startIndex={startTimestamp:o}&endIndex={endTimestamp:o}&count=1");
-            using var responseIngress = await _httpClientGzip.GetAsync(requestUri).ConfigureAwait(false);
+            using HttpResponseMessage responseIngress = await _httpClientGzip.GetAsync(requestUri).ConfigureAwait(false);
             CheckIfResponseWasSuccessful(responseIngress);
-            var ms = await AsyncDecompressGzipAsync(responseIngress).ConfigureAwait(false);
-            using var sr = new StreamReader(ms);
-            var objectSummaryData = await JsonSerializer.DeserializeAsync<object>(ms).ConfigureAwait(false);
+            MemoryStream ms = await AsyncDecompressGzipAsync(responseIngress).ConfigureAwait(false);
+            using StreamReader sr = new (ms);
+            object objectSummaryData = await JsonSerializer.DeserializeAsync<object>(ms).ConfigureAwait(false);
             return objectSummaryData.ToString().TrimStart(new char[] { '[' }).TrimEnd(new char[] { ']' });
         }
 
         private static async Task<MemoryStream> AsyncDecompressGzipAsync(HttpResponseMessage httpMessage)
         {
-            using var response = await httpMessage.Content.ReadAsStreamAsync().ConfigureAwait(false);
-            var destination = new MemoryStream();
-            using (var decompressor = (Stream)new GZipStream(response, CompressionMode.Decompress, true))
+            using Stream response = await httpMessage.Content.ReadAsStreamAsync().ConfigureAwait(false);
+            MemoryStream destination = new ();
+            using (Stream decompressor = (Stream)new GZipStream(response, CompressionMode.Decompress, true))
             {
                 await decompressor.CopyToAsync(destination).ConfigureAwait(false);
             }
@@ -289,29 +289,29 @@ namespace EDSAnalytics
         {
             Console.WriteLine("Writing Data to " + stream.Id + " stream");
 
-            using var serializedData = new StringContent(JsonSerializer.Serialize(list));
-            var requestUri = new Uri($"http://localhost:{_port}/api/v1/Tenants/{_tenantId}/Namespaces/{_namespaceId}/Streams/{stream.Id}/Data");
-            var responseWriteDataToStream = await _httpClient.PostAsync(requestUri, serializedData).ConfigureAwait(false);
+            using StringContent serializedData = new (JsonSerializer.Serialize(list));
+            Uri requestUri = new ($"http://localhost:{_port}/api/v1/Tenants/{_tenantId}/Namespaces/{_namespaceId}/Streams/{stream.Id}/Data");
+            HttpResponseMessage responseWriteDataToStream = await _httpClient.PostAsync(requestUri, serializedData).ConfigureAwait(false);
             CheckIfResponseWasSuccessful(responseWriteDataToStream);
         }
 
         private static async Task AsyncWriteDataToStreamAsync(AggregateData data, SdsStream stream)
         {
-            var dataList = new List<AggregateData>
+            List<AggregateData> dataList = new ()
             {
                 data,
             };
             Console.WriteLine("Writing Data to " + stream.Id + " stream");
 
-            using var serializedData = new StringContent(JsonSerializer.Serialize(dataList));
-            var requestUri = new Uri($"http://localhost:{_port}/api/v1/Tenants/{_tenantId}/Namespaces/{_namespaceId}/Streams/{stream.Id}/Data");
-            var responseWriteDataToStream = await _httpClient.PostAsync(requestUri, serializedData).ConfigureAwait(false);
+            using StringContent serializedData = new (JsonSerializer.Serialize(dataList));
+            Uri requestUri = new ($"http://localhost:{_port}/api/v1/Tenants/{_tenantId}/Namespaces/{_namespaceId}/Streams/{stream.Id}/Data");
+            HttpResponseMessage responseWriteDataToStream = await _httpClient.PostAsync(requestUri, serializedData).ConfigureAwait(false);
             CheckIfResponseWasSuccessful(responseWriteDataToStream);
         }
 
         private static SdsTypeProperty CreateSdsTypePropertyOfTypeDouble(string idAndName, bool isKey)
         {
-            var property = new SdsTypeProperty
+            SdsTypeProperty property = new ()
             {
                 Id = idAndName,
                 Name = idAndName,
@@ -328,7 +328,7 @@ namespace EDSAnalytics
 
         private static SdsTypeProperty CreateSdsTypePropertyOfTypeDateTime(string idAndName, bool isKey)
         {
-            var property = new SdsTypeProperty
+            SdsTypeProperty property = new ()
             {
                 Id = idAndName,
                 Name = idAndName,
@@ -345,9 +345,9 @@ namespace EDSAnalytics
 
         private static double GetValue(string json, string property)
         {
-            using var document = JsonDocument.Parse(json);
-            var root = document.RootElement;
-            var summaryElement = root.GetProperty(Constants.SummariesProperty);
+            using JsonDocument document = JsonDocument.Parse(json);
+            JsonElement root = document.RootElement;
+            JsonElement summaryElement = root.GetProperty(Constants.SummariesProperty);
             if (summaryElement.TryGetProperty(property, out JsonElement propertyElement))
             {
                 if (propertyElement.TryGetProperty(Constants.ValueProperty, out JsonElement valueElement))
