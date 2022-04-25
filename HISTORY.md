@@ -1,5 +1,9 @@
 # Version History
 
+## 1.0.18 / 2022-04-15
+
+- Replaced var with explicit types
+
 ## 1.0.17 / 2022-03-24
 
 - Changed agent used in pipeline
