@@ -1,6 +1,6 @@
 # EDS Analytics Sample and Test
 
-**Version:** 1.0.18
+**Version:** 1.1.0
 
 [![Build Status](https://dev.azure.com/osieng/engineering/_apis/build/status/product-readiness/Edge/aveva.sample-eds-eds_analytics-dotnet?branchName=main)](https://dev.azure.com/osieng/engineering/_build/latest?definitionId=2642&branchName=main)
 
@@ -8,8 +8,8 @@ This sample demonstrates how to build an application that can run analytics agai
 
 ## Requirements
 
-- .NET 5.0 must be installed
-  - Note: If using Visual Studio, version 16.8 is required for development against .NET 5.0
+- .NET 6.0 must be installed
+  - Note: If using Visual Studio, version 17.1 is required for development against .NET 6.0
 - Edge Data Store must be installed and running on the local machine.
 
 ## Running the sample
@@ -114,7 +114,7 @@ Step 12
 
 ---
 
-Tested against DotNet 5.0.
+Tested against DotNet 6.0.
 
 For the main Edge page [ReadMe](https://github.com/osisoft/OSI-Samples-Edge)  
 For the main samples page [ReadMe](https://github.com/osisoft/OSI-Samples)
