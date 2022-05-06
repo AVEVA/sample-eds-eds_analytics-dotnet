@@ -41,6 +41,12 @@ jobs:
       name: 00-OSIManaged-Build
       demands: SKU -equals VSEnterprise
     steps:
+      - task: UseDotNet@2
+        displayName: 'Install dotnet 6'
+        inputs:
+          packageType: 'sdk'
+          version: '6.x'
+
       - task: DotNetCoreCLI@2
         displayName: 'Run tests'
         inputs:
@@ -51,6 +57,12 @@ jobs:
   - template: '/miscellaneous/build_templates/code-analysis.yml@templates'
     parameters:
       buildSteps:
+        - task: UseDotNet@2
+          displayName: 'Install dotnet 6'
+          inputs:
+            packageType: 'sdk'
+            version: '6.x'
+
         - task: DotNetCoreCLI@2
           displayName: 'Nuget restore'
           inputs:
