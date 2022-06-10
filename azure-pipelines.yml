@@ -35,7 +35,7 @@ variables:
   - name: analysisProject
     value: EDS_Analytics_DotNet
   - name: demands
-    value: $(containerDemands)
+    value: SKU -equals VSEnterprise2022
 
 
 jobs:
