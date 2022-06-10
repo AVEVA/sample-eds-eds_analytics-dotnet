@@ -29,7 +29,6 @@ resources:
       endpoint: osisoft/OSI-Samples
 
 variables:
-  - template: '/miscellaneous/build_templates/variables.yml@templates'
   - name: covStream
     value: SDSDotNetAPI
   - name: analysisProject
