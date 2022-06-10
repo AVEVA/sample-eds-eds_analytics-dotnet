@@ -37,7 +37,7 @@ variables:
 
 parameters:
   - name: containerDemands
-    default: SKU -equals VSEnterprise2022
+    default: SKU -equals VSEnterprise
 
 jobs:
   - job: Tests
