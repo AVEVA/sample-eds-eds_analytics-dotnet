@@ -35,7 +35,8 @@ variables:
     value: EDS_Analytics_DotNet
 
 parameters:
-  containerDemands: SKU -equals VSEnterprise2022
+  - name: containerDemands
+    default: SKU -equals VSEnterprise2022
 
 jobs:
   - job: Tests
