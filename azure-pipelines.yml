@@ -35,11 +35,15 @@ variables:
   - name: analysisProject
     value: EDS_Analytics_DotNet
 
+parameters:
+  - name: containerDemands
+    default: SKU -equals VSEnterprise
+
 jobs:
   - job: Tests
     pool:
       name: 00-OSIManaged-Build
-      demands: SKU -equals VSEnterprise
+      demands: ${{ parameters.containerDemands }}
     steps:
       - task: UseDotNet@2
         displayName: 'Install dotnet 6'
