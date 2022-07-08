@@ -35,10 +35,6 @@ variables:
   - name: analysisProject
     value: EDS_Analytics_DotNet
 
-parameters:
-  - name: containerDemands
-    default: SKU -equals VSEnterprise
-
 jobs:
   - job: Tests
     pool:
