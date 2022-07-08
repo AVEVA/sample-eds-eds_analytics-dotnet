@@ -43,7 +43,7 @@ jobs:
   - job: Tests
     pool:
       name: 00-OSIManaged-Build
-      demands: ${{ parameters.containerDemands }}
+      demands: $(containerDemands)
     steps:
       - task: UseDotNet@2
         displayName: 'Install dotnet 6'
