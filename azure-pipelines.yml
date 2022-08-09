@@ -36,14 +36,17 @@ variables:
     value: EDS_Analytics_DotNet
 
 parameters:
+  - name: pool
+    default: 00-OSIManaged-Build
   - name: containerDemands
-    default: SKU -equals VSEnterprise
+    type: object
+    default: ['SKU -equals VSEnterprise']
 
 jobs:
   - job: Tests
     condition: ne(variables['Build.Reason'], 'Schedule')
     pool:
-      name: 00-OSIManaged-Build
+      name: ${{ parameters.pool }}
       demands: ${{ parameters.containerDemands }}
     steps:
       - task: UseDotNet@2
