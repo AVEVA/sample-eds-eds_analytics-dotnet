@@ -26,6 +26,40 @@ namespace EDSAnalytics
             Console.WriteLine("Demo Application Ran Successfully!");
         }
 
+        public static SdsTypeProperty CreateSdsTypePropertyOfTypeDouble(string idAndName, bool isKey)
+        {
+            SdsTypeProperty property = new ()
+            {
+                Id = idAndName,
+                Name = idAndName,
+                IsKey = isKey,
+                SdsType = new SdsType
+                {
+                    Name = Constants.DoubleTypeName,
+                    SdsTypeCode = 14, // 14 is the SdsTypeCode for a Double type. Go to the SdsTypeCode section in EDS documentation for more information.
+                },
+            };
+
+            return property;
+        }
+
+        public static SdsTypeProperty CreateSdsTypePropertyOfTypeDateTime(string idAndName, bool isKey)
+        {
+            SdsTypeProperty property = new ()
+            {
+                Id = idAndName,
+                Name = idAndName,
+                IsKey = isKey,
+                SdsType = new SdsType
+                {
+                    Name = Constants.DateTimeTypeName,
+                    SdsTypeCode = 16, // 16 is the SdsTypeCode for a DateTime type. Go to the SdsTypeCode section in EDS documentation for more information.
+                },
+            };
+
+            return property;
+        }
+
         public static async Task<bool> MainAsync()
         {
             // ==== Client constants ====
@@ -307,40 +341,6 @@ namespace EDSAnalytics
             Uri requestUri = new ($"http://localhost:{_port}/api/v1/Tenants/{_tenantId}/Namespaces/{_namespaceId}/Streams/{stream.Id}/Data");
             HttpResponseMessage responseWriteDataToStream = await _httpClient.PostAsync(requestUri, serializedData).ConfigureAwait(false);
             CheckIfResponseWasSuccessful(responseWriteDataToStream);
-        }
-
-        private static SdsTypeProperty CreateSdsTypePropertyOfTypeDouble(string idAndName, bool isKey)
-        {
-            SdsTypeProperty property = new ()
-            {
-                Id = idAndName,
-                Name = idAndName,
-                IsKey = isKey,
-                SdsType = new SdsType
-                {
-                    Name = Constants.DoubleTypeName,
-                    SdsTypeCode = 14, // 14 is the SdsTypeCode for a Double type. Go to the SdsTypeCode section in EDS documentation for more information.
-                },
-            };
-
-            return property;
-        }
-
-        private static SdsTypeProperty CreateSdsTypePropertyOfTypeDateTime(string idAndName, bool isKey)
-        {
-            SdsTypeProperty property = new ()
-            {
-                Id = idAndName,
-                Name = idAndName,
-                IsKey = isKey,
-                SdsType = new SdsType
-                {
-                    Name = Constants.DateTimeTypeName,
-                    SdsTypeCode = 16, // 16 is the SdsTypeCode for a DateTime type. Go to the SdsTypeCode section in EDS documentation for more information.
-                },
-            };
-
-            return property;
         }
 
         private static double GetValue(string json, string property)

@@ -55,6 +55,11 @@ jobs:
           version: '6.x'
 
       - task: DotNetCoreCLI@2
+        displayName: 'Nuget restore'
+        inputs:
+          command: restore
+
+      - task: DotNetCoreCLI@2
         displayName: 'Run tests'
         inputs:
           command: test
