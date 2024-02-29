@@ -36,10 +36,10 @@ variables:
 
 parameters:
   - name: pool
-    default: 00-OSIManaged-Build
+    default: 'DevOps Managed AKS VSBuild'
   - name: containerDemands
     type: object
-    default: ['SKU -equals VSEnterprise']
+    default: ['Agent.OS -equals Windows_NT']
 
 jobs:
   - job: Tests
