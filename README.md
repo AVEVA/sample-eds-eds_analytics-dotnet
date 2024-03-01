@@ -2,7 +2,7 @@
 
 **Version:** 1.1.5
 
-[![Build Status](https://dev.azure.com/osieng/engineering/_apis/build/status/product-readiness/Edge/aveva.sample-eds-eds_analytics-dotnet?branchName=main)](https://dev.azure.com/osieng/engineering/_build/latest?definitionId=2642&branchName=main)
+[![Build Status](https://dev.azure.com/AVEVA-VSTS/Cloud%20Platform/_apis/build/status%2Fproduct-readiness%2FEDS%2FAVEVA.sample-eds-eds_analytics-dotnet?repoName=AVEVA%2Fsample-eds-eds_analytics-dotnet&branchName=feature%2Fresolve-RunTests)](https://dev.azure.com/AVEVA-VSTS/Cloud%20Platform/_build/latest?definitionId=16154&repoName=AVEVA%2Fsample-eds-eds_analytics-dotnet&branchName=feature%2Fresolve-RunTests)
 
 This sample demonstrates how to build an application that can run analytics against streams in Edge Data Store and write results back to Edge Data Store.
 
