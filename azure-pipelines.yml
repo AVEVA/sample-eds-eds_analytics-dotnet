@@ -27,6 +27,7 @@ resources:
       type: github
       name: AVEVA/AVEVA-Samples
       endpoint: AVEVA
+      ref: feature/binskim
 
 variables:
   - name: covStream
