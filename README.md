@@ -2,7 +2,7 @@
 
 **Version:** 1.1.5
 
-[![Build Status](https://dev.azure.com/osieng/engineering/_apis/build/status/product-readiness/Edge/aveva.sample-eds-eds_analytics-dotnet?branchName=main)](https://dev.azure.com/osieng/engineering/_build/latest?definitionId=2642&branchName=main)
+[![Build Status](https://dev.azure.com/AVEVA-VSTS/Cloud%20Platform/_apis/build/status%2Fproduct-readiness%2FEDS%2FAVEVA.sample-eds-eds_analytics-dotnet?repoName=AVEVA%2Fsample-eds-eds_analytics-dotnet&branchName=main)](https://dev.azure.com/AVEVA-VSTS/Cloud%20Platform/_build/latest?definitionId=16154&repoName=AVEVA%2Fsample-eds-eds_analytics-dotnet&branchName=main)
 
 This sample demonstrates how to build an application that can run analytics against streams in Edge Data Store and write results back to Edge Data Store.
 
@@ -48,8 +48,8 @@ dotnet run
 dotnet test
 ```
 
-For the main EDS page [ReadMe](https://osisoft.github.io/Edge-Data-Store-Docs/V1/)  
-For the main samples page [ReadMe](https://github.com/osisoft/OSI-Samples)
+For the main EDS page [ReadMe](https://docs.aveva.com/bundle/connect-data-services/page/1263211.html)  
+For the main samples page [ReadMe](https://github.com/AVEVA/AVEVA-Samples)
 
 ## Sample Application Contents
 
@@ -86,7 +86,7 @@ Step 6
 ### Data Aggregation
 
 This portion will read data from a stream of sine wave points, calculate the mean, minimum, maximum, and range, and write the result to a new stream.
-It also uses EDS's standard data aggregate API calls to return the mean, minimum, maximum, and standard deviation. For more information on the EDS's standard data aggregate API reference: [EDS Summaries](https://osisoft.github.io/Edge-Data-Store-Docs/V1/SDS/Read%20data/Reading_Data_API_1-0.html#get-summaries)
+It also uses EDS's standard data aggregate API calls to return the mean, minimum, maximum, and standard deviation. For more information on the EDS's standard data aggregate API reference: [EDS Summaries](https://docs.aveva.com/bundle/edge-data-store/page/1229378.html)
 
 Step 7
 
@@ -116,5 +116,5 @@ Step 12
 
 Tested against DotNet 6.0.
 
-For the main Edge page [ReadMe](https://github.com/osisoft/OSI-Samples-Edge)  
-For the main samples page [ReadMe](https://github.com/osisoft/OSI-Samples)
+For the main Edge page [ReadMe](https://github.com/AVEVA/AVEVA-Samples-Edge)  
+For the main samples page [ReadMe](https://github.com/AVEVA/AVEVA-Samples)
